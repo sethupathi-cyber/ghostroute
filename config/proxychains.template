@@ -1,0 +1,27 @@
+# GhostRoute — proxychains4.conf Template
+# Generated at runtime by ProxyChainEngine
+# This file replaces /etc/proxychains4.conf when the proxy module is active
+
+# Proxy chain mode:
+#   strict_chain  - Each proxy must be reachable; fail = abort
+#   dynamic_chain - Skip dead proxies, use next alive one
+#   random_chain  - Randomise proxy order (requires chain_len)
+dynamic_chain
+
+# Number of hops in random_chain mode
+# chain_len = 2
+
+# Quiet mode (suppress output)
+quiet_mode
+
+# Proxy DNS through the chain (prevent DNS leaks)
+proxy_dns
+
+# Timeout in ms per connection attempt
+tcp_read_time_out 15000
+tcp_connect_time_out 8000
+
+[ProxyList]
+# GhostRoute proxy pool — managed automatically
+# Format: type  host     port  [user  pass]
+# {proxy_list}

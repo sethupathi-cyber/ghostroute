@@ -1,0 +1,40 @@
+# GhostRoute torrc Template
+# Managed by GhostRoute — generated at runtime
+
+SocksPort {socks_port}
+ControlPort {control_port}
+HashedControlPassword {hashed_password}
+
+# Transparent proxy for system-wide routing
+TransPort 127.0.0.1:{trans_port}
+DNSPort 127.0.0.1:{dns_port}
+
+# Hostname mapping for .onion addresses
+AutomapHostsOnResolve 1
+AutomapHostsSuffixes .onion,.exit
+
+# Stream isolation (enables per-request IP via unique SOCKS credentials)
+IsolateClientAddr 1
+IsolateSOCKSAuth 1
+IsolateClientProtocol 1
+IsolateDestAddr 1
+IsolateDestPort 0
+
+# Exit node policy
+StrictNodes 0
+ExcludeExitNodes {exclude_exit_nodes}
+ExitNodes {preferred_exit_nodes}
+
+# Circuit tuning
+MaxCircuitDirtiness 600
+NewCircuitPeriod 30
+MaxClientCircuitsPending 48
+
+# Data directory
+DataDirectory {data_dir}
+
+# Logging (minimal to reduce metadata)
+Log notice file {data_dir}/tor.log
+
+# Disable unused features
+ClientOnly 1

@@ -1,0 +1,83 @@
+# GhostRoute — Default Configuration
+# /etc/ghostroute/config.yaml
+# All values here are defaults and can be changed via:
+#   ghostroute config <key> <value>
+#   Or by editing this file directly.
+
+tor:
+  socks_port: 9050
+  control_port: 9051
+  trans_port: 9040           # TransparentProxy port (AnonSurf-style redirect)
+  dns_port: 5353             # Tor internal DNS port
+  control_password: "ghostroute"
+  max_circuits: 5
+  circuit_timeout: 30        # Seconds to wait for circuit establishment
+  data_dir: "/tmp/ghostroute-tor"
+  # Exit node country restrictions (ISO 3166-1 alpha-2, prefix with { })
+  exclude_exit_nodes: "{cn},{ru},{ir},{kp},{by}"
+  preferred_exit_nodes: "{us},{de},{nl},{se},{ch},{no}"
+
+proxy:
+  list_file: "/etc/ghostroute/proxies.txt"
+  chain_length: 2            # Number of hops in proxy chain
+  timeout: 10                # Seconds per connection attempt
+  health_check_interval: 60  # Seconds between pool health checks
+  rotation_mode: "round-robin"  # round-robin | random | latency
+  # Public proxy scraper sources (used by 'proxy scrape' command)
+  scraper_sources:
+    - "https://api.proxyscrape.com/v3/free-proxy-list/get?request=displayproxies&protocol=socks5&timeout=5000&country=all"
+    - "https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/socks5.txt"
+    - "https://raw.githubusercontent.com/ShiftyTR/Proxy-List/master/socks5.txt"
+    - "https://raw.githubusercontent.com/monosans/proxy-list/main/proxies/socks5.txt"
+    - "https://raw.githubusercontent.com/hookzof/socks5_list/master/proxy.txt"
+
+rotation:
+  enabled: true
+  interval_seconds: 120      # How often to rotate IP (time mode)
+  requests_per_ip: 50        # Rotate after N requests (request mode)
+  mode: "time"               # time | request | manual
+
+obfuscation:
+  # Priority order — modules are applied in this sequence when multiple are enabled.
+  # Change with: ghostroute config obfuscation.priority "obfs4,meek,timing_jitter"
+  priority:
+    - obfs4
+    - meek
+    - timing_jitter
+    - packet_padding
+    - protocol_mimicry
+  padding:
+    min_bytes: 0
+    max_bytes: 512
+  timing:
+    min_jitter_ms: 5
+    max_jitter_ms: 200
+  obfs4:
+    bridge: ""               # Set your obfs4 bridge address here, e.g.:
+                             # "obfs4 1.2.3.4:443 FINGERPRINT cert=CERT iat-mode=0"
+  meek:
+    url: "https://meek.azureedge.net/"
+    front: "ajax.aspnetcdn.com"
+  mimicry:
+    protocol: "https"        # https | websocket
+
+dns:
+  mode: "tor"                # tor | dnscrypt | doh
+  dnscrypt_config: "/etc/dnscrypt-proxy/dnscrypt-proxy.toml"
+  doh_url: "https://cloudflare-dns.com/dns-query"
+  backup_resolver: "127.0.0.1"
+
+kill_switch:
+  mode: "hard"               # hard | soft
+  monitor_interval: 5        # Seconds between health checks in soft mode
+
+mac:
+  interface: "auto"          # auto | eth0 | wlan0 | etc.
+  mode: "random"             # random | preserve
+
+audit:
+  check_urls:
+    - "https://api.ipify.org?format=json"
+    - "https://ipinfo.io/json"
+    - "https://httpbin.org/ip"
+  timeout: 15

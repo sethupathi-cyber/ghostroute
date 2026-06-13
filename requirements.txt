@@ -1,0 +1,27 @@
+# GhostRoute Dependencies
+# Install with: pip install -r requirements.txt
+
+# Core TUI
+rich>=13.0.0
+prompt_toolkit>=3.0.0
+
+# Tor Control
+stem>=1.8.0
+
+# HTTP & Proxy
+requests>=2.31.0
+requests[socks]>=2.31.0
+PySocks>=1.7.1
+aiohttp>=3.9.0
+
+# Config
+PyYAML>=6.0.0
+
+# Async
+asyncio-socks>=0.7.0
+
+# DNS
+dnspython>=2.4.0
+
+# System / Utils
+psutil>=5.9.0
